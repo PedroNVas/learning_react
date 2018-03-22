@@ -54,6 +54,34 @@ class ListContacts extends Component {
 		onDeleteContact: PropTypes.func.isRequired
 	};
 
+	/*
+		componentWillMount()
+
+		Invoked immediately before the component is inserted into the DOM
+	 */
+
+	/*
+		componentDidMount()
+
+		Invoked immediately after the component is inserted into the DOM
+
+		Good to:
+		* Load external data
+		* Change a state (which will cause a re-render)
+	 */
+
+	/*
+		componentWillUnmount()
+
+		Invoked immediately before the component is removed from the DOM
+	 */
+
+	/*
+		componentWillReceiveProps()
+
+		Always invoked whenever the component is about to receive new props
+	 */
+
 	state = {
 		query: ''
 	};
