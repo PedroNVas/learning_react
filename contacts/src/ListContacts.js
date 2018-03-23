@@ -1,6 +1,7 @@
 import escapeRegExp from 'escape-string-regexp'
 import PropTypes from 'prop-types'
-import React, {Component} from 'react'
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import sortBy from 'sort-by'
 
 /* Stateless Functional Component
@@ -48,107 +49,111 @@ ListContacts.propTypes = {
 
 class ListContacts extends Component {
 
-	// PropTypes can be an attribute (make it static)
-	static propTypes = {
-		contacts: PropTypes.array.isRequired,
-		onDeleteContact: PropTypes.func.isRequired
-	};
+  // PropTypes can be an attribute (make it static)
+  static propTypes = {
+    contacts: PropTypes.array.isRequired,
+    onDeleteContact: PropTypes.func.isRequired,
+  }
 
-	/*
-		componentWillMount()
+  /*
+    componentWillMount()
 
-		Invoked immediately before the component is inserted into the DOM
-	 */
+    Invoked immediately before the component is inserted into the DOM
+   */
 
-	/*
-		componentDidMount()
+  /*
+    componentDidMount()
 
-		Invoked immediately after the component is inserted into the DOM
+    Invoked immediately after the component is inserted into the DOM
 
-		Good to:
-		* Load external data
-		* Change a state (which will cause a re-render)
-	 */
+    Good to:
+    * Load external data
+    * Change a state (which will cause a re-render)
+   */
 
-	/*
-		componentWillUnmount()
+  /*
+    componentWillUnmount()
 
-		Invoked immediately before the component is removed from the DOM
-	 */
+    Invoked immediately before the component is removed from the DOM
+   */
 
-	/*
-		componentWillReceiveProps()
+  /*
+    componentWillReceiveProps()
 
-		Always invoked whenever the component is about to receive new props
-	 */
+    Always invoked whenever the component is about to receive new props
+   */
 
-	state = {
-		query: ''
-	};
+  state = {
+    query: ''
+  }
 
-	updateQuery = (query) => {
-		this.setState({query: query.trim()})
-	};
+  updateQuery = (query) => {
+    this.setState({query: query.trim()})
+  }
 
-	clearQuery = () => {
-		this.setState({query: ''})
-	};
+  clearQuery = () => {
+    this.setState({query: ''})
+  }
 
-	render() {
-		const {contacts, onDeleteContact} = this.props;
-		const {query} = this.state;
+  render () {
+    const {contacts, onDeleteContact} = this.props
+    const {query} = this.state
 
-		let showingContacts;
+    let showingContacts
 
-		if (query) {
-			const match = new RegExp(escapeRegExp(query), 'i');
-			showingContacts = contacts.filter(contact => match.test(contact.name))
-		} else {
-			showingContacts = contacts
-		}
+    if (query) {
+      const match = new RegExp(escapeRegExp(query), 'i')
+      showingContacts = contacts.filter(contact => match.test(contact.name))
+    } else {
+      showingContacts = contacts
+    }
 
-		showingContacts.sort(sortBy('name'));
+    showingContacts.sort(sortBy('name'))
 
-		return (
-			<div className='list-contacts'>
-				<div className='list-contacts-top'>
-					<input
-						className='search-contacts'
-						type='text'
-						placeholder='Search contacts'
-						value={query}
-						onChange={(event) => this.updateQuery(event.target.value)}
-					/>
-				</div>
+    return (
+      <div className='list-contacts'>
+        <div className='list-contacts-top'>
+          <input
+            className='search-contacts'
+            type='text'
+            placeholder='Search contacts'
+            value={query}
+            onChange={(event) => this.updateQuery(event.target.value)}
+          />
+          <Link
+            to='/create'
+            className='add-contact'
+          >Add Contact
+          </Link>
+        </div>
 
-				{showingContacts.length !== contacts.length && (
-					<div className='showing-contacts'>
-						<span>Now showing {showingContacts.length} of {contacts.length} total</span>
-						<button onClick={this.clearQuery}>Show all</button>
-					</div>
-				)}
+        {showingContacts.length !== contacts.length && (
+          <div className='showing-contacts'>
+            <span>Now showing {showingContacts.length} of {contacts.length} total</span>
+            <button onClick={this.clearQuery}>Show all</button>
+          </div>
+        )}
 
-				<ol className='contact-list'>
-					{showingContacts.map(contact => (
-						<li key={contact.id} className='contact-list-item'>
-							<div className='contact-avatar' style={{
-								backgroundImage: `url(${contact.avatarURL})`
-							}}/>
-							<div className='contact-details'>
-								<p>{contact.name}</p>
-								<p>{contact.email}</p>
-							</div>
-							<button onClick={() => onDeleteContact(contact)} className='contact-remove'>
-								Remove
-							</button>
-						</li>
-					))}
-				</ol>
-			</div>
-		)
-	}
+        <ol className='contact-list'>
+          {showingContacts.map(contact => (
+            <li key={contact.id} className='contact-list-item'>
+              <div className='contact-avatar' style={{
+                backgroundImage: `url(${contact.avatarURL})`
+              }}/>
+              <div className='contact-details'>
+                <p>{contact.name}</p>
+                <p>{contact.email}</p>
+              </div>
+              <button onClick={() => onDeleteContact(contact)} className='contact-remove'>
+                Remove
+              </button>
+            </li>
+          ))}
+        </ol>
+      </div>
+    )
+  }
 
 }
-
 
 export default ListContacts
